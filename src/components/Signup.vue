@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const name = ref("");
 const email = ref("");
 const password = ref("");
@@ -14,9 +17,9 @@ const signup = async () => {
   });
   console.warn("result", result);
   if (result.status == 201) {
-    alert("Sign up Success");
+    localStorage.setItem("user-info", JSON.stringify(result.data));
+    router.push({ name: "Home" }); // ✅ AB KAAM KAREGA
   }
-  localStorage.setItem("user-info", JSON.stringify(result.data));
 };
 </script>
 <template>
