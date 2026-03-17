@@ -1,50 +1,34 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import { onMounted } from "vue";
 
 const router = useRouter();
-const name = ref("");
+
 const email = ref("");
 const password = ref("");
 
+const login = async () => {
+  let result = await axios.get(
+    `http://localhost:3000/users?email=${email.value}&password=${password.value}`,
+  );
+  if (result.status == 200 && result.data.length > 0) {
+    localStorage.setItem("user-info", JSON.stringify(result.data[0]));
+    router.push({ name: "Home" });
+  }
+};
 onMounted(() => {
   let user = localStorage.getItem("user-info");
   if (user) {
     router.push({ name: "Home" });
   }
 });
-
-const signup = async () => {
-  console.warn("Sign up Success", name.value, email.value, password.value);
-  let result = await axios.post("http://localhost:3000/users", {
-    email: email.value,
-    password: password.value,
-    name: name.value,
-  });
-  console.warn("result", result);
-  if (result.status == 201) {
-    localStorage.setItem("user-info", JSON.stringify(result.data));
-    router.push({ name: "Home" });
-  }
-};
 </script>
 <template>
-  <div class="signup">
+  <div class="login">
     <img class="logo" src="../assets/resto.jpg" alt="" />
-    <h1>Sign Up</h1>
-    <div class="signup-form">
-      <label class="input-label" for="Name">Name: </label>
-      <input
-        class="input-field"
-        type="text"
-        placeholder="Enter Name"
-        v-model="name"
-      />
-      <br />
-      <br />
-
+    <h1>Login</h1>
+    <div class="login-form">
       <label class="input-label" for="Name">Email: </label>
       <input
         class="input-field"
@@ -64,16 +48,18 @@ const signup = async () => {
       />
       <br />
       <br />
-      <button class="signup-btn" v-on:click="signup">Sign Up</button>
+      <button class="login-btn" v-on:click="login">Login</button>
       <p>
-        <router-link to="/login">Login If you have a account</router-link>
+        <router-link to="/signup"
+          >Sign Up If you don't have a account</router-link
+        >
       </p>
     </div>
   </div>
 </template>
 
 <style>
-.signup {
+.login {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -97,7 +83,7 @@ const signup = async () => {
   border-radius: 5px;
   padding: 5px;
 }
-.signup-btn {
+.login-btn {
   display: absolute;
   margin-top: 10px;
   width: 200px;

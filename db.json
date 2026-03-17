@@ -1,9 +1,6 @@
 {
   "users": [
     {
-      "id": "51c9"
-    },
-    {
       "id": "5f7f",
       "email": "soban@gmail.com",
       "password": "password",
@@ -14,6 +11,12 @@
       "email": "ali@gmail.com",
       "password": "password",
       "name": "Ali "
+    },
+    {
+      "id": "09e6",
+      "email": "afnan@gmail.com",
+      "password": "password",
+      "name": "afnan"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
